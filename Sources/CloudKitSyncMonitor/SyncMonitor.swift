@@ -10,6 +10,7 @@ import CoreData
 import Network
 import SwiftUI
 import CloudKit
+import Observation
 
 /// An object, usually used as a singleton, that provides, and publishes, the current state of `NSPersistentCloudKitContainer`'s sync
 ///
@@ -91,8 +92,9 @@ import CloudKit
 ///         }
 ///     }
 ///
-@available(iOS 14.0, macCatalyst 14.0, OSX 11, tvOS 14.0, watchOS 7, *)
-public class SyncMonitor: ObservableObject {
+@available(macOS 14.0, iOS 17.0, macCatalyst 17.0, watchOS 10.0, tvOS 17.0, *)
+@Observable
+public class SyncMonitor {
     /// A singleton to use
     public static let shared = SyncMonitor()
 
@@ -362,23 +364,23 @@ public class SyncMonitor: ObservableObject {
     // MARK: - Specific Status Properties -
 
     /// The state of `NSPersistentCloudKitContainer`'s "setup" event
-    @Published public private(set) var setupState: SyncState = .notStarted
+    public private(set) var setupState: SyncState = .notStarted
 
     /// The state of `NSPersistentCloudKitContainer`'s "import" event
-    @Published public private(set) var importState: SyncState = .notStarted
+    public private(set) var importState: SyncState = .notStarted
 
     /// The state of `NSPersistentCloudKitContainer`'s "export" event
-    @Published public private(set) var exportState: SyncState = .notStarted
+    public private(set) var exportState: SyncState = .notStarted
 
     /// Is the network available?
     ///
     /// This is true if the network is available in any capacity (Wi-Fi, Ethernet, cellular, carrier pidgeon, etc) - we just care if we can reach iCloud. 
-    @Published public private(set) var networkAvailable: Bool? = nil
+    public private(set) var networkAvailable: Bool? = nil
 
-    @Published public private(set) var loggedIntoIcloud: Bool? = nil
+    public private(set) var loggedIntoIcloud: Bool? = nil
 
     /// The current status of the user's iCloud account - updated automatically if they change it
-    @Published public private(set) var iCloudAccountStatus: CKAccountStatus?
+    public private(set) var iCloudAccountStatus: CKAccountStatus?
 
     /// If an error was encountered when retrieving the user's account status, this will be non-nil
     public private(set) var iCloudAccountStatusUpdateError: Error?
